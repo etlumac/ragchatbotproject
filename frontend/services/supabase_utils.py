@@ -33,7 +33,7 @@ def download_file(user_id: str, filename: str, save_dir: Path = Path("downloads"
     safe_name = safe_filename(filename)
     storage_path = f"{user_id}/{safe_name}"
     save_dir.mkdir(parents=True, exist_ok=True)
-    file_path = save_dir / filename  # сохраняем под оригинальным именем
+    file_path = save_dir / safe_name  # сохраняем под оригинальным именем
     res = supabase.storage.from_(SUPABASE_BUCKET).download(storage_path)
     with open(file_path, "wb") as f:
         f.write(res)
