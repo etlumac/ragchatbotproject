@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from services.utils import safe_filename
 from dotenv import load_dotenv
+from supabase import Client
 
 load_dotenv()
 

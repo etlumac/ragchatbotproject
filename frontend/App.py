@@ -9,7 +9,7 @@ from pptx import Presentation
 import base64
 
 from services.file_manager import index_document, delete_document, safe_filename
-from services.supabase_utils import download_file, list_uploaded_files
+from services.supabase_utils import download_file, get_public_url, list_uploaded_files
 from services.auth import login_user, register_user
 
 import sys
@@ -168,7 +168,9 @@ with col1:
         if file_path and file_path.exists():
             if selected_document.endswith(".pdf"):
                 #st.markdown(f'<iframe src="{file_path.as_posix()}" width="100%" height="800px"></iframe>', unsafe_allow_html=True)
-                display_pdf(file_path)
+                #display_pdf(file_path)
+                public_url = get_public_url(user_id, selected_document)
+                st.markdown(f'<iframe src="{public_url}" width="100%" height="800px" type="application/pdf"></iframe>', unsafe_allow_html=True)
 
             elif selected_document.endswith(".docx"):
                 doc = docx.Document(file_path)
