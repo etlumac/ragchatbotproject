@@ -171,16 +171,9 @@ with col1:
                 #display_pdf(file_path)
                 #public_url = get_public_url(user_id, selected_document)
                 #st.markdown(f'<iframe src="{public_url}" width="100%" height="800px" type="application/pdf"></iframe>', unsafe_allow_html=True)
-                #public_url = get_public_url(user_id, selected_document)
-                #st.write("DEBUG public_url:", public_url)  
-                #st.markdown(f'<iframe src="{public_url}" width="100%" height="800px" style="border:none;"></iframe>', unsafe_allow_html=True)
                 public_url = get_public_url(user_id, selected_document)
-                if "?" in public_url:
-                    fixed_url = public_url + "&download=true"
-                else:
-                    fixed_url = public_url + "?download=true"
-
-                st.markdown(f'<iframe src="{fixed_url}" width="100%" height="800px" style="border:none;"></iframe>', unsafe_allow_html=True)
+                st.write("DEBUG public_url:", public_url)  
+                st.markdown(f'<iframe src="{public_url}" width="100%" height="800px" style="border:none;"></iframe>', unsafe_allow_html=True)
 
             elif selected_document.endswith(".docx"):
                 doc = docx.Document(file_path)
