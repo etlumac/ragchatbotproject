@@ -44,3 +44,10 @@ def list_uploaded_files(user_id: str):
     res = supabase.storage.from_(SUPABASE_BUCKET).list(path=user_id)
     files = [file["name"] for file in res if file["name"] != ".emptyFolderPlaceholder"]
     return files
+
+
+def get_public_url(user_id: str, filename: str) -> str:
+    safe_name = safe_filename(filename)
+    storage_path = f"{user_id}/{safe_name}"
+    public_url = supabase.storage.from_(SUPABASE_BUCKET).get_public_url(storage_path)
+    return public_url
