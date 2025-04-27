@@ -168,9 +168,9 @@ with col1:
         if file_path and file_path.exists():
             if selected_document.endswith(".pdf"):
                 #st.markdown(f'<iframe src="{file_path.as_posix()}" width="100%" height="800px"></iframe>', unsafe_allow_html=True)
-                #display_pdf(file_path)
-                public_url = get_public_url(user_id, selected_document)
-                st.markdown(f'<iframe src="{public_url}" width="100%" height="800px" type="application/pdf"></iframe>', unsafe_allow_html=True)
+                display_pdf(file_path)
+                #public_url = get_public_url(user_id, selected_document)
+                #st.markdown(f'<iframe src="{public_url}" width="100%" height="800px" type="application/pdf"></iframe>', unsafe_allow_html=True)
 
             elif selected_document.endswith(".docx"):
                 doc = docx.Document(file_path)
