@@ -4,6 +4,8 @@ from pathlib import Path
 from services.utils import safe_filename
 from dotenv import load_dotenv
 from supabase import Client
+from mimetypes import guess_type
+
 
 load_dotenv()
 
@@ -16,11 +18,21 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 def upload_file(user_id: str, filename: str, file_path: Path):
     safe_name = safe_filename(filename)
     storage_path = f"{user_id}/{safe_name}"
+
+    # Определяем Content-Type
+    mime_type, _ = guess_type(file_path.name)
+    #if mime_type is None:
+        # Если не получилось определить, ставим общий
+        #mime_type = "application/octet-stream"
+
     with open(file_path, "rb") as f:
         response = supabase.storage.from_(SUPABASE_BUCKET).upload(
             path=storage_path,
             file=f,
-            file_options={"upsert": "true"}
+            file_options={
+                "upsert": "true",
+                "content-type": mime_type
+            }
         )
     return response
 

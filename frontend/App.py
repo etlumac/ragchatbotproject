@@ -167,13 +167,16 @@ with col1:
 
         if file_path and file_path.exists():
             if selected_document.endswith(".pdf"):
-                #st.markdown(f'<iframe src="{file_path.as_posix()}" width="100%" height="800px"></iframe>', unsafe_allow_html=True)
-                #display_pdf(file_path)
-                #public_url = get_public_url(user_id, selected_document)
-                #st.markdown(f'<iframe src="{public_url}" width="100%" height="800px" type="application/pdf"></iframe>', unsafe_allow_html=True)
-                public_url = get_public_url(user_id, selected_document)
-                st.write("DEBUG public_url:", public_url)  
-                st.markdown(f'<iframe src="{public_url}" width="100%" height="800px" style="border:none;"></iframe>', unsafe_allow_html=True)
+                file_path = download_file(user_id, selected_document)
+                if file_path.exists():
+                    with open(file_path, "rb") as f:
+                        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+                    pdf_display = f"""
+                        <iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="800px" style="border:none;"></iframe>
+                    """
+                    st.markdown(pdf_display, unsafe_allow_html=True)
+                else:
+                    st.error("Не удалось загрузить PDF файл.")
 
             elif selected_document.endswith(".docx"):
                 doc = docx.Document(file_path)
