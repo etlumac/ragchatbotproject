@@ -7,7 +7,7 @@ import streamlit as st
 from pathlib import Path
 from pptx import Presentation
 import base64
-
+import streamlit.components.v1 as components
 from services.file_manager import index_document, delete_document, safe_filename
 from services.supabase_utils import download_file, get_public_url, list_uploaded_files
 from services.auth import login_user, register_user
@@ -167,16 +167,9 @@ with col1:
 
         if file_path and file_path.exists():
             if selected_document.endswith(".pdf"):
-                file_path = download_file(user_id, selected_document)
-                if file_path.exists():
-                    with open(file_path, "rb") as f:
-                        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-                    pdf_display = f"""
-                        <iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="800px" style="border:none;"></iframe>
-                    """
-                    st.markdown(pdf_display, unsafe_allow_html=True)
-                else:
-                    st.error("Не удалось загрузить PDF файл.")
+                public_url = get_public_url(user_id, selected_document)
+                viewer_url = f"https://docs.google.com/gview?url={public_url}&embedded=true"
+                components.html(f'<iframe src="{viewer_url}" width="100%" height="800px" style="border: none;"></iframe>', height=800)
 
             elif selected_document.endswith(".docx"):
                 doc = docx.Document(file_path)
