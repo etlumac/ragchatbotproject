@@ -223,7 +223,7 @@ def delete_chat():
 # ==== КОЛОНКА 2: ЧАТ ====
 with col2:
     if selected_document:
-        col_buttons = st.columns([0.25, 0.57])
+        col_buttons = st.columns([0.29, 0.5, 0.13])  # увеличили количество колонок до 3
 
         with col_buttons[0]:
             if st.button("🔄 Сбросить историю чата"):
@@ -237,6 +237,11 @@ with col2:
         with col_buttons[1]:
             if st.button("🗑️ Удалить чат и документ", key="delete_chat_button"):
                 delete_chat()
+
+        with col_buttons[2]:
+            if st.button("🚪 Выход"):
+                del st.session_state["user_id"]
+                st.rerun()
 
         chat_container = st.container()
         with chat_container:
