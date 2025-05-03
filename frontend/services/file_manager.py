@@ -78,7 +78,7 @@ def index_document(uploaded_file, user_id: str):
         text = extract_text_from_file(temp_path)
 
         raw_doc = LangchainDocument(page_content=text, metadata={"source": filename})
-        chunks = sentence_window_split(raw_doc.page_content, window_size=3, stride=1)
+        chunks = sentence_window_split(raw_doc.page_content, window_size=10, stride=1)
         if not chunks:
             return {"error": "Не удалось разбить документ на чанки"}
 

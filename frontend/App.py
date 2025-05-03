@@ -26,7 +26,7 @@ from services.supabase_db import (
     delete_chat_history
 )
 
-st.set_page_config(layout="wide", page_title="Web page")
+st.set_page_config(layout="wide", page_title="RAGchat")
 
 CHAT_HISTORY_PATH = Path("static/chat_history.json")
 METADATA_PATH = Path("static/metadata.json")
