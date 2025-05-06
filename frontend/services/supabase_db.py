@@ -10,7 +10,11 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # 🧠 CHAT HISTORY
 
 def get_document_id(user_id: str, document_name: str):
-    result = supabase.table("metadata").select("id").eq("user_id", user_id).eq("document_name", document_name).execute().data
+    result = supabase.table("metadata")\
+        .select("id")\
+        .eq("user_id", user_id)\
+        .eq("document_name", document_name)\
+        .execute().data
     return result[0]["id"] if result else None
 
 def fetch_chat_history(user_id):
@@ -40,7 +44,10 @@ def save_chat_history(user_id: str, document_name: str, messages: list):
 
     if existing:
         supabase.table("chat_history")\
-            .update({"messages": messages})\
+            .update({
+                "messages": messages,
+                "document_name": document_name  # на случай, если имя документа обновилось
+            })\
             .eq("user_id", user_id)\
             .eq("document_id", document_id)\
             .execute()
@@ -49,6 +56,7 @@ def save_chat_history(user_id: str, document_name: str, messages: list):
             .insert({
                 "user_id": user_id,
                 "document_id": document_id,
+                "document_name": document_name,  # ⚠️ обязательно, чтобы не было NULL
                 "messages": messages
             }).execute()
 
