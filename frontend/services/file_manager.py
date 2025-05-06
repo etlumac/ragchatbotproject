@@ -27,7 +27,7 @@ load_dotenv()
 SUPPORTED_EXTENSIONS = (".pdf", ".docx", ".txt", ".pptx")
 METADATA_PATH = Path("static/metadata.json")
 
-def sentence_window_split(text, window_size=3, stride=1):
+def sentence_window_split(text, window_size=5, stride=3):
     sentences = sent_tokenize(text)
     chunks = []
     for i in range(0, len(sentences) - window_size + 1, stride):
