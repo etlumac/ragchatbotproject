@@ -9,38 +9,58 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # 🧠 CHAT HISTORY
 
+def get_document_id(user_id: str, document_name: str):
+    result = supabase.table("metadata").select("id").eq("user_id", user_id).eq("document_name", document_name).execute().data
+    return result[0]["id"] if result else None
+
 def fetch_chat_history(user_id):
-    data = supabase.table("chat_history").select("*").eq("user_id", user_id).execute().data
-    return {item["document_name"]: item["messages"] for item in data}
+    data = supabase.table("chat_history").select("messages, document_id").eq("user_id", user_id).execute().data
+
+    # Получим отображение id -> имя
+    doc_ids = [item["document_id"] for item in data]
+    if not doc_ids:
+        return {}
+
+    docs = supabase.table("metadata").select("id, document_name").in_("id", doc_ids).execute().data
+    id_to_name = {doc["id"]: doc["document_name"] for doc in docs}
+
+    return {id_to_name[item["document_id"]]: item["messages"] for item in data if item["document_id"] in id_to_name}
+
 
 def save_chat_history(user_id: str, document_name: str, messages: list):
-    # Проверяем, есть ли уже история для этого пользователя и документа
+    document_id = get_document_id(user_id, document_name)
+    if not document_id:
+        raise ValueError("Документ не найден для сохранения чата")
+
     existing = supabase.table("chat_history")\
         .select("id")\
         .eq("user_id", user_id)\
-        .eq("document_name", document_name)\
+        .eq("document_id", document_id)\
         .execute().data
 
     if existing:
         supabase.table("chat_history")\
             .update({"messages": messages})\
             .eq("user_id", user_id)\
-            .eq("document_name", document_name)\
+            .eq("document_id", document_id)\
             .execute()
     else:
         supabase.table("chat_history")\
             .insert({
                 "user_id": user_id,
-                "document_name": document_name,
+                "document_id": document_id,
                 "messages": messages
             }).execute()
 
 
 def delete_chat_history(user_id: str, document_name: str):
+    document_id = get_document_id(user_id, document_name)
+    if not document_id:
+        return
     supabase.table("chat_history")\
         .delete()\
         .eq("user_id", user_id)\
-        .eq("document_name", document_name)\
+        .eq("document_id", document_id)\
         .execute()
 
 
