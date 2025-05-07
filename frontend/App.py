@@ -86,6 +86,14 @@ if "metadata" not in st.session_state:
 if "documents" not in st.session_state:
     st.session_state["documents"] = list_uploaded_files(user_id)
 
+# === ИНИЦИАЛИЗАЦИЯ selected_document ПРИ ПЕРВОЙ ЗАГРУЗКЕ ===
+if st.session_state["documents"]:
+    if "last_selected_document" not in st.session_state:
+        st.session_state["last_selected_document"] = st.session_state["documents"][0]
+    if "selected_document" not in st.session_state:
+        st.session_state["selected_document"] = st.session_state["documents"][0]
+
+
 col1, col_mid, col2 = st.columns([1, 0.05, 1])
 
 def display_pdf(file_path):
@@ -148,12 +156,16 @@ with col1:
             st.query_params.clear()
 
     selected_document = (
-        st.sidebar.selectbox("Текущий документ:", st.session_state["documents"])
-        if st.session_state["documents"]
-        else None
+    st.sidebar.selectbox("Текущий документ:", st.session_state["documents"], 
+                         index=st.session_state["documents"].index(st.session_state["last_selected_document"])
+                         if "last_selected_document" in st.session_state else 0)
+    if st.session_state["documents"]
+    else None
     )
 
     if selected_document is not None:
+        st.session_state["selected_document"] = selected_document
+        
         if "last_selected_document" not in st.session_state or selected_document != st.session_state["last_selected_document"]:
             st.session_state["messages"] = st.session_state["chat_history"].get(
                 selected_document,
