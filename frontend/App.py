@@ -197,11 +197,12 @@ def delete_chat():
         #delete_document(selected_document)
         delete_document(selected_document, user_id)
 
+        safe_name = safe_filename(selected_document)
+
         st.session_state["chat_history"].pop(selected_document, None)
         #delete_chat_history(selected_document)
-        delete_chat_history(user_id, selected_document)
+        delete_chat_history(user_id, safe_name)
 
-        safe_name = safe_filename(selected_document)
         st.session_state["metadata"].pop(safe_name, None)
         #delete_metadata(safe_name)
         delete_metadata(user_id, safe_name)
