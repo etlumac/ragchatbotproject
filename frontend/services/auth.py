@@ -26,12 +26,17 @@ def register_user(username, email, password):
     return result
 
 def login_user(email, password):
-    result = supabase.table("users").select("*").eq("email", email).single().execute()
-    if not result.data:
-        return None, "Пользователь не найден"
+    try:
+        result = supabase.table("users").select("*").eq("email", email).execute()
+    except Exception as e:
+        return None, f"Ошибка при запросе: {e}"
 
-    user = result.data
+    if not result.data:
+        return None, "Неверные данные для входа"
+
+    user = result.data[0]  # Берём первого, если найдено несколько
     if verify_password(password, user["password_hash"]):
         return user["user_id"], None
     else:
-        return None, "Неверный пароль"
+        return None, "Неверные данные для входа"
+
