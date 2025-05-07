@@ -12,6 +12,8 @@ from services.qdrant_utils import upload_vectors, delete_vectors_by_document_id
 from services.qdrant_utils import init_qdrant
 from services.supabase_db import save_metadata as save_metadata_to_db
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from nltk.tokenize import sent_tokenize
 import nltk
 nltk.download("punkt")
