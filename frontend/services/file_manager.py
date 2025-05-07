@@ -11,6 +11,8 @@ from services.supabase_utils import upload_file, delete_file
 from services.qdrant_utils import upload_vectors, delete_vectors_by_document_id
 from services.qdrant_utils import init_qdrant
 from services.supabase_db import save_metadata as save_metadata_to_db
+import fitz
+print(fitz.__doc__)
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
@@ -53,7 +55,6 @@ def save_metadata(metadata):
 
 def extract_text_from_file(file_path: Path) -> str:
     if file_path.suffix == ".pdf":
-        import fitz
         return "\n".join([page.get_text() for page in fitz.open(file_path)])
     elif file_path.suffix == ".docx":
         doc = docx.Document(file_path)
