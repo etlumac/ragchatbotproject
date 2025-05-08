@@ -196,6 +196,9 @@ with col1:
     if selected_document:
         #file_path = download_file(selected_document)
         file_path = download_file(user_id, selected_document)
+        if not file_path or not file_path.exists():
+            st.warning("⚠️ Файл не найден или ещё загружается.")
+            st.stop()
 
 
         if file_path and file_path.exists():
