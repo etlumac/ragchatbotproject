@@ -86,6 +86,10 @@ if "metadata" not in st.session_state:
 if "documents" not in st.session_state:
     st.session_state["documents"] = list_uploaded_files(user_id)
 
+if "selected_document" in st.session_state and st.session_state["selected_document"] not in st.session_state["documents"]:
+    st.session_state["selected_document"] = None
+
+
 # === ИНИЦИАЛИЗАЦИЯ selected_document ПРИ ПЕРВОЙ ЗАГРУЗКЕ ===
 if st.session_state["documents"]:
     if "last_selected_document" not in st.session_state:
