@@ -188,6 +188,7 @@ with col1:
                 [{"role": "ai", "content": "Привет! Я готов помочь вам с вашим документом."}]
             )
             st.session_state["last_selected_document"] = selected_document
+            st.rerun()
     else:
         st.session_state["messages"] = [{"role": "ai", "content": "Привет! Загрузите новый документ, чтобы начать."}]
 
