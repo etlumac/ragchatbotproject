@@ -89,6 +89,17 @@ if "documents" not in st.session_state:
 if "selected_document" in st.session_state and st.session_state["selected_document"] not in st.session_state["documents"]:
     st.session_state["selected_document"] = None
 
+# === Установим дефолтный документ, если ничего не выбрано и есть документы ===
+if st.session_state["documents"]:
+    if "selected_document" not in st.session_state or st.session_state["selected_document"] is None:
+        default_doc = st.session_state["documents"][0]
+        st.session_state["selected_document"] = default_doc
+        st.session_state["last_selected_document"] = default_doc
+        st.session_state["messages"] = st.session_state["chat_history"].get(
+            default_doc,
+            [{"role": "ai", "content": "Привет! Я готов помочь вам с вашим документом."}]
+        )
+
 
 # === ИНИЦИАЛИЗАЦИЯ selected_document ПРИ ПЕРВОЙ ЗАГРУЗКЕ ===
 if st.session_state["documents"]:
