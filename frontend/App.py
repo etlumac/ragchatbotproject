@@ -210,26 +210,29 @@ with col1:
 # Функция удаления чата
 def delete_chat():
     try:
-        #delete_document(selected_document)
         delete_document(selected_document, user_id)
-
         safe_name = safe_filename(selected_document)
 
         st.session_state["chat_history"].pop(selected_document, None)
-        #delete_chat_history(selected_document)
         delete_chat_history(user_id, safe_name)
 
         st.session_state["metadata"].pop(safe_name, None)
-        #delete_metadata(safe_name)
         delete_metadata(user_id, safe_name)
 
         st.session_state["documents"].remove(selected_document)
-        st.session_state["last_selected_document"] = st.session_state["documents"][0] if st.session_state["documents"] else None
 
-        if not st.session_state["documents"]:
+        # ⬇️ Обновим выбранный документ, если остались другие
+        if st.session_state["documents"]:
+            new_doc = st.session_state["documents"][0]
+            st.session_state["selected_document"] = new_doc
+            st.session_state["last_selected_document"] = new_doc
+            st.session_state["messages"] = st.session_state["chat_history"].get(
+                new_doc,
+                [{"role": "ai", "content": "Привет! Я готов помочь вам с вашим документом."}]
+            )
+        else:
+            st.session_state["selected_document"] = None
             st.session_state["messages"] = [{"role": "ai", "content": "Привет! Загрузите новый документ, чтобы начать."}]
-
-         #st.success("✅ Чат и документ удалены!")
     except Exception as e:
         print(f"❌ Ошибка при удалении: {e}")
         st.error(f"❌ Ошибка при удалении: {e}")
