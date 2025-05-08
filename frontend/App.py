@@ -260,6 +260,9 @@ with col2:
         with chat_container:
             chat_box = st.container(height=650)
             with chat_box:
+                if "messages" not in st.session_state:
+                    st.session_state["messages"] = [{"role": "ai", "content": "Привет! Загрузите новый документ, чтобы начать."}]
+
                 for msg in st.session_state["messages"]:
                     with st.chat_message(msg["role"]):
                         st.write(msg["content"])
