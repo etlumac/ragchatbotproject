@@ -158,7 +158,8 @@ with col1:
     selected_document = (
     st.sidebar.selectbox("Текущий документ:", st.session_state["documents"], 
                          index=st.session_state["documents"].index(st.session_state["last_selected_document"])
-                         if "last_selected_document" in st.session_state else 0)
+                         if "last_selected_document" in st.session_state else 0,
+                         key=f"selectbox_{len(st.session_state['documents'])}")
     if st.session_state["documents"]
     else None
     )
