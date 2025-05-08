@@ -205,7 +205,7 @@ with col1:
             if selected_document.endswith(".pdf"):
                 public_url = get_public_url(user_id, selected_document)
                 viewer_url = f"https://docs.google.com/gview?url={public_url}&embedded=true"
-                components.html(f'<iframe src="{viewer_url}" width="100%" height="800px" style="border: none;"></iframe>', height=800)
+                components.html(f'<iframe src="{viewer_url}" width="100%" height="800px" style="border: none;"></iframe>', height=800, key=f"pdf_viewer_{selected_document}")
 
             elif selected_document.endswith(".docx"):
                 doc = docx.Document(file_path)
