@@ -230,6 +230,7 @@ def delete_chat():
                 new_doc,
                 [{"role": "ai", "content": "Привет! Я готов помочь вам с вашим документом."}]
             )
+            st.rerun()
         else:
             st.session_state["selected_document"] = None
             st.session_state["messages"] = [{"role": "ai", "content": "Привет! Загрузите новый документ, чтобы начать."}]
