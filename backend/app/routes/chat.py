@@ -119,7 +119,7 @@ def answer_with_rag_multi_query(
             hits = qdrant_client.search(
                 collection_name=COLLECTION_NAME,
                 query_vector=query_vector,
-                limit=10,
+                limit=5,
                 query_filter=filter_condition
             )
             all_relevant_docs.extend([h.payload.get("text", "") for h in hits])
@@ -157,7 +157,7 @@ def answer_with_rag_multi_query(
         hyde_hits = qdrant_client.search(
             collection_name=COLLECTION_NAME,
             query_vector=hyde_vector,
-            limit=10,
+            limit=5,
             query_filter=filter_condition
         )
         all_relevant_docs.extend([h.payload.get("text", "") for h in hyde_hits])
